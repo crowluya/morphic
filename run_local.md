@@ -6,3 +6,4 @@ TAVILY_API_KEY=[YOUR_TAVILY_API_KEY]， 使用# OPENAI_API_KEY="sk-or-v1-5bf2cf1
 # OPENAI_API_BASE_URL="https://openrouter.ai/api"
 # OPENAI_API_MODEL="deepseek/deepseek-chat"， 
 
+# 设置根系
