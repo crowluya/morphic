@@ -9,7 +9,6 @@ import {
 import { sanitizeUrl } from '@/lib/utils'
 import { tool } from 'ai'
 import Exa from 'exa-js'
-import fetch from 'node-fetch'
 
 export const searchTool = tool({
   description: 'Search the web for information',
@@ -123,7 +122,7 @@ async function tavilySearch(
   }
   const includeImageDescriptions = true
 
-  const fetchOptions: any = {
+  const response = await fetch('https://api.tavily.com/search', {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json'
@@ -139,14 +138,7 @@ async function tavilySearch(
       include_domains: includeDomains,
       exclude_domains: excludeDomains
     })
-  };
-
-  // 添加代理配置
-  if (process.env.HTTPS_PROXY) {
-    fetchOptions.agent = new (require('https-proxy-agent').HttpsProxyAgent)(process.env.HTTPS_PROXY);
-  }
-
-  const response = await fetch('https://api.tavily.com/search', fetchOptions);
+  });
 
   if (!response.ok) {
     throw new Error(
