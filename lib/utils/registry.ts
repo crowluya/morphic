@@ -135,8 +135,10 @@ export function getToolCallModel(model?: string) {
       return getModel(`ollama:${ollamaModel}`)
     case 'google':
       return getModel('google:gemini-2.0-flash')
+    case 'openai-compatible':
+      return getModel(`openai-compatible:${process.env.NEXT_PUBLIC_OPENAI_COMPATIBLE_MODEL}`)
     default:
-      return getModel('openai:gpt-4o-mini')
+      return getModel('openai-compatible:Pro/deepseek-ai/DeepSeek-R1')
   }
 }
 
