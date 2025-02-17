@@ -1,19 +1,19 @@
-name: morphic-stack
+# Docker Compose configuration for the morphic-stack development environment
 
+name: morphic-stack
 services:
   morphic:
+    image: ghcr.io/${GITHUB_REPOSITORY:-your-username/morphic}:latest
+    command: bun start -H 0.0.0.0
     build:
       context: .
       dockerfile: Dockerfile
+      cache_from:
+        - morphic:builder
+        - morphic:latest
+    env_file: .env.local # Load environment variables
     ports:
-      - '3001:3000'
-    volumes:
-      - .:/app
-      - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - PORT=3000
-      - REDIS_URL=redis://redis:6379
+      - '3000:3000' # Maps port 3000 on the host to port 3000 in the container.
     depends_on:
       - redis
       - searxng
@@ -21,7 +21,7 @@ services:
   redis:
     image: redis:alpine
     ports:
-      - '6380:6379'
+      - '6379:6379'
     volumes:
       - redis_data:/data
     command: redis-server --appendonly yes
@@ -30,7 +30,7 @@ services:
     image: searxng/searxng
     ports:
       - '${SEARXNG_PORT:-8080}:8080'
-    env_file: .env.local
+    env_file: .env.local # can remove if you want to use env variables or in settings.yml
     volumes:
       - ./searxng-limiter.toml:/etc/searxng/limiter.toml
       - ./searxng-settings.yml:/etc/searxng/settings.yml

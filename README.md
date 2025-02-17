@@ -139,7 +139,7 @@ Visit http://localhost:3000 in your browser.
 
 ## 🌐 Deploy
 
-Host your own live version of Morphic with Vercel or Cloudflare Pages.
+Host your own live version of Morphic with Vercel, Cloudflare Pages, or Docker.
 
 ### Vercel
 
@@ -189,6 +189,9 @@ This will allow you to use Morphic as your default search engine in the browser.
 - DeepSeek
   - DeepSeek V3
   - DeepSeek R1
+- xAI
+  - grok-2
+  - grok-2-vision
 
 ## ⚡ AI SDK Implementation
 

@@ -1,31 +1,27 @@
-# 构建阶段
-FROM node:18-alpine
-
-# 使用阿里云镜像源
-RUN sed -i 's/dl-cdn.alpinelinux.org/mirrors.aliyun.com/g' /etc/apk/repositories
-RUN apk add --no-cache git
-
-# 安装 pnpm
-RUN npm install -g pnpm
+# Base image
+FROM oven/bun:latest AS builder
 
 WORKDIR /app
 
-# 设置 npm 镜像源
-RUN echo "registry=https://registry.npmmirror.com" > .npmrc && \
-    echo "shamefully-hoist=true" >> .npmrc
+# Install dependencies (separated for better cache utilization)
+COPY package.json bun.lockb ./
+RUN bun install
 
-# 复制项目文件
+# Copy source code and build
 COPY . .
+RUN bun next telemetry disable
+RUN bun run build
 
-# 安装依赖
-RUN pnpm install
+# Runtime stage
+FROM oven/bun:latest AS runner
+WORKDIR /app
 
-# 暴露端口
-EXPOSE 3000
+# Copy only necessary files from builder
+COPY --from=builder /app/.next ./.next
+COPY --from=builder /app/public ./public
+COPY --from=builder /app/package.json ./package.json
+COPY --from=builder /app/bun.lockb ./bun.lockb
+COPY --from=builder /app/node_modules ./node_modules
 
-# 设置环境变量
-ENV PORT=3000
-ENV NODE_ENV=development
-
-# 启动开发服务器
-CMD ["pnpm", "dev"]
+# Start production server
+CMD ["bun", "start", "-H", "0.0.0.0"]
