@@ -1,4 +1,4 @@
-name: morphic-stack
+version: "3.7"
 
 services:
   morphic:
@@ -6,36 +6,55 @@ services:
       context: .
       dockerfile: Dockerfile
     ports:
-      - '3001:3000'
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - OPENAI_API_KEY=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
+      - OPENAI_API_HOST=https://openrouter.ai/api/v1
+      - NEXT_PUBLIC_OPENAI_COMPATIBLE_MODEL=deepseek/deepseek-chat
     volumes:
       - .:/app
       - /app/node_modules
-    environment:
-      - NODE_ENV=development
-      - PORT=3000
-      - REDIS_URL=redis://redis:6379
     depends_on:
       - redis
       - searxng
 
   redis:
+    container_name: redis
     image: redis:alpine
+    restart: unless-stopped
+    networks:
+      - searxng
     ports:
-      - '6380:6379'
-    volumes:
-      - redis_data:/data
-    command: redis-server --appendonly yes
+      - "6380:6379"
 
   searxng:
-    image: searxng/searxng
+    container_name: searxng
+    image: searxng/searxng:latest
+    restart: unless-stopped
+    networks:
+      - searxng
     ports:
-      - '${SEARXNG_PORT:-8080}:8080'
-    env_file: .env.local
+      - "8080:8080"
     volumes:
-      - ./searxng-limiter.toml:/etc/searxng/limiter.toml
       - ./searxng-settings.yml:/etc/searxng/settings.yml
-      - searxng_data:/data
+    environment:
+      - INSTANCE_NAME=searxng
+      - AUTOCOMPLETE=google
+      - BASE_URL=http://localhost:8080/
+      - REDIS_URL=redis://redis:6379/0
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "1m"
+        max-file: "1"
 
-volumes:
-  redis_data:
-  searxng_data:
+networks:
+  searxng:
+    driver: bridge
