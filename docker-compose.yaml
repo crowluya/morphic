@@ -1,6 +1,5 @@
-# Docker Compose configuration for the morphic-stack development environment
+version: "3.7"
 
-name: morphic-stack
 services:
   morphic:
     image: ghcr.io/${GITHUB_REPOSITORY:-your-username/morphic}:latest
@@ -11,31 +10,52 @@ services:
       cache_from:
         - morphic:builder
         - morphic:latest
-    env_file: .env.local # Load environment variables
+    env_file: .env.local
     ports:
-      - '3000:3000' # Maps port 3000 on the host to port 3000 in the container.
+      - "3000:3000"
+    environment:
+      - NODE_ENV=development
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_API_HOST=${OPENAI_COMPATIBLE_API_BASE_URL}
+      - NEXT_PUBLIC_OPENAI_COMPATIBLE_MODEL=${NEXT_PUBLIC_OPENAI_COMPATIBLE_MODEL}
+    volumes:
+      - .:/app
+      - /app/node_modules
     depends_on:
       - redis
       - searxng
 
   redis:
+    container_name: redis
     image: redis:alpine
+    restart: unless-stopped
+    networks:
+      - searxng
     ports:
-      - '6379:6379'
-    volumes:
-      - redis_data:/data
-    command: redis-server --appendonly yes
+      - "6380:6379"
 
   searxng:
-    image: searxng/searxng
+    container_name: searxng
+    image: searxng/searxng:latest
+    restart: unless-stopped
+    networks:
+      - searxng
     ports:
-      - '${SEARXNG_PORT:-8080}:8080'
-    env_file: .env.local # can remove if you want to use env variables or in settings.yml
+      - "8080:8080"
     volumes:
-      - ./searxng-limiter.toml:/etc/searxng/limiter.toml
       - ./searxng-settings.yml:/etc/searxng/settings.yml
-      - searxng_data:/data
+    environment:
+      - INSTANCE_NAME=searxng
+      - BASE_URL=http://localhost:8080/
+      - SEARXNG_SECRET=${SEARXNG_SECRET:-""}
+    cap_drop:
+      - ALL
+    cap_add:
+      - CHOWN
+      - SETGID
+      - SETUID
+      - DAC_OVERRIDE
 
-volumes:
-  redis_data:
-  searxng_data:
+networks:
+  searxng:
+    driver: bridge
