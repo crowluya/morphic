@@ -1,60 +1,10 @@
 use_default_settings: true
-general:
-  debug: false
-  instance_name: "SearXNG"
 
 server:
-  port: 8080
-  bind_address: "0.0.0.0"
-  secret_key: "105133f5719719a057f5a9987454c706b8e3567367b74e0a509e3fbdb4ebba11"
-  base_url: "http://localhost:8080/"
-  image_proxy: false
-  http_protocol_version: "1.0"
-  method: "GET"
-  public_instance: false
-
-outgoing:
-  request_timeout: 5.0
-  max_request_timeout: 15.0
-  useragent_suffix: ""
-  pool_connections: 100
-  pool_maxsize: 10
-  enable_http2: true
-  proxies:
-    http: "http://10.0.2.15:8889"
-    https: "http://10.0.2.15:8889"
-  source_ips: []
-  retries: 1
-
-redis:
-  url: redis://redis:6379/0
-
-search:
-  safe_search: 0
-  autocomplete: "google"
-  default_lang: "en"
-  ban_time_on_fail: 5
-  max_ban_time_on_fail: 120
+  base_url: http://localhost:8080/
+  secret_key: "k89OOl6u+Z4RNNjjqrJLdhw8Ark+LYsQdVmZ2p4QGok="
 
 engines:
   - name: google
     engine: google
     shortcut: g
-    use_mobile_ui: false
-    proxies:
-      http: "http://10.0.2.15:8889"
-      https: "http://10.0.2.15:8889"
-
-  - name: duckduckgo
-    engine: duckduckgo
-    shortcut: d
-    proxies:
-      http: "http://10.0.2.15:8889"
-      https: "http://10.0.2.15:8889"
-
-  - name: bing
-    engine: bing
-    shortcut: b
-    proxies:
-      http: "http://10.0.2.15:8889"
-      https: "http://10.0.2.15:8889"

@@ -12,7 +12,7 @@ export const redisConfig: RedisConfig = {
   useLocalRedis: process.env.USE_LOCAL_REDIS === 'true',
   upstashRedisRestUrl: process.env.UPSTASH_REDIS_REST_URL,
   upstashRedisRestToken: process.env.UPSTASH_REDIS_REST_TOKEN,
-  localRedisUrl: process.env.LOCAL_REDIS_URL || 'redis://localhost:6379'
+  localRedisUrl: process.env.LOCAL_REDIS_URL || 'redis://redis:6379'
 }
 
 let localRedisClient: RedisClientType | null = null
@@ -209,7 +209,7 @@ export async function getRedisClient(): Promise<RedisWrapper> {
   if (redisConfig.useLocalRedis) {
     if (!localRedisClient) {
       const localRedisUrl =
-        redisConfig.localRedisUrl || 'redis://localhost:6379'
+        redisConfig.localRedisUrl || 'redis://redis:6379'
       try {
         localRedisClient = createClient({ url: localRedisUrl })
         await localRedisClient.connect()

@@ -10,6 +10,12 @@ RUN bun install
 # Copy source code and build
 COPY . .
 RUN bun next telemetry disable
+
+# Set environment variables to skip Redis check
+ENV SKIP_REDIS_CHECK=true
+ENV USE_LOCAL_REDIS=false
+ENV LOCAL_REDIS_URL=redis://redis:6379
+
 RUN bun run build
 
 # Runtime stage

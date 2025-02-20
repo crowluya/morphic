@@ -1,61 +1,57 @@
-version: "3.7"
+version: "3.8"
 
 services:
   morphic:
-    image: ghcr.io/${GITHUB_REPOSITORY:-your-username/morphic}:latest
-    command: bun start -H 0.0.0.0
     build:
       context: .
       dockerfile: Dockerfile
-      cache_from:
-        - morphic:builder
-        - morphic:latest
-    env_file: .env.local
     ports:
       - "3000:3000"
     environment:
-      - NODE_ENV=development
+      - NODE_ENV=production
+      - NEXT_PUBLIC_BASE_URL=http://localhost:3000
+      - SEARXNG_API_URL=http://searxng:8080
+      - LOCAL_REDIS_URL=redis://redis:6379
+      - USE_LOCAL_REDIS=true
       - OPENAI_API_KEY=${OPENAI_API_KEY}
       - OPENAI_API_HOST=${OPENAI_COMPATIBLE_API_BASE_URL}
       - NEXT_PUBLIC_OPENAI_COMPATIBLE_MODEL=${NEXT_PUBLIC_OPENAI_COMPATIBLE_MODEL}
     volumes:
       - .:/app
       - /app/node_modules
+    networks:
+      - default
     depends_on:
-      - redis
-      - searxng
+      redis:
+        condition: service_healthy
+      searxng:
+        condition: service_started
 
   redis:
     container_name: redis
     image: redis:alpine
     restart: unless-stopped
-    networks:
-      - searxng
     ports:
       - "6380:6379"
+    networks:
+      - default
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
 
   searxng:
     container_name: searxng
     image: searxng/searxng:latest
     restart: unless-stopped
-    networks:
-      - searxng
     ports:
       - "8080:8080"
+    networks:
+      - default
     volumes:
-      - ./searxng-settings.yml:/etc/searxng/settings.yml
-    environment:
-      - INSTANCE_NAME=searxng
-      - BASE_URL=http://localhost:8080/
-      - SEARXNG_SECRET=${SEARXNG_SECRET:-""}
-    cap_drop:
-      - ALL
-    cap_add:
-      - CHOWN
-      - SETGID
-      - SETUID
-      - DAC_OVERRIDE
+      - ./searxng-settings.yml:/etc/searxng/settings.yml:ro
 
 networks:
-  searxng:
+  default:
     driver: bridge

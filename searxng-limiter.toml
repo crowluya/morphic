@@ -1,1 +1,9 @@
-#https://docs.searxng.org/admin/searx.limiter.html
+# SearXNG request limiter configuration
+
+[client]
+max_request_count = 100
+interval = 60
+
+[botdetection]
+ip = { filter = "no-filter", stop = { max_ban_time = 600, min_ban_time = 60 } }
+tokens = { filter = "no-filter" }
