@@ -1,10 +1,39 @@
 use_default_settings: true
 
 server:
-  base_url: http://localhost:8080/
+  base_url: "http://searxng:8080/"
   secret_key: "k89OOl6u+Z4RNNjjqrJLdhw8Ark+LYsQdVmZ2p4QGok="
+  bind_address: "0.0.0.0"
+  port: 8080
+  image_proxy: true
+  limiter: false
+  method: "GET"
+  http_protocol_version: "1.0"
+  enable_api: true
+  api_key: "k89OOl6u+Z4RNNjjqrJLdhw8Ark+LYsQdVmZ2p4QGok="
+
+search:
+  safe_search: 0
+  default_lang: ""
+  max_results: 50
+  formats:
+    - html
+    - json
 
 engines:
   - name: google
     engine: google
     shortcut: g
+  - name: bing
+    engine: bing
+    shortcut: b
+  - name: duckduckgo
+    engine: duckduckgo
+    shortcut: d
+  - name: wikipedia
+    engine: wikipedia
+    shortcut: w
+
+general:
+  debug: true
+  instance_name: "searxng"

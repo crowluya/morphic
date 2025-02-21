@@ -1,10 +1,10 @@
 import { searchSchema } from '@/lib/schema/search'
 import {
-  SearchResultImage,
-  SearchResultItem,
-  SearchResults,
-  SearXNGResponse,
-  SearXNGResult
+    SearchResultImage,
+    SearchResultItem,
+    SearchResults,
+    SearXNGResponse,
+    SearXNGResult
 } from '@/lib/types'
 import { sanitizeUrl } from '@/lib/utils'
 import { tool } from 'ai'
@@ -218,8 +218,8 @@ async function searxngSearch(
     const url = new URL(`${apiUrl}/search`)
     url.searchParams.append('q', query)
     url.searchParams.append('format', 'json')
-    url.searchParams.append('categories', 'general,images')
-
+    url.searchParams.append('token', process.env.SEARXNG_SECRET || '')
+    
     // Apply search depth settings
     if (searchDepth === 'advanced') {
       url.searchParams.append('time_range', '')
