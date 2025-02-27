@@ -218,8 +218,8 @@ async function searxngSearch(
     const url = new URL(`${apiUrl}/search`)
     url.searchParams.append('q', query)
     url.searchParams.append('format', 'json')
-    url.searchParams.append('token', process.env.SEARXNG_SECRET || '')
-    
+    url.searchParams.append('categories', 'general,images')
+
     // Apply search depth settings
     if (searchDepth === 'advanced') {
       url.searchParams.append('time_range', '')
@@ -235,7 +235,8 @@ async function searxngSearch(
     const response = await fetch(url.toString(), {
       method: 'GET',
       headers: {
-        Accept: 'application/json'
+        Accept: 'application/json',
+        'X-API-Key': process.env.SEARXNG_SECRET || ''
       }
     })
 

@@ -5,17 +5,19 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
+    env_file:
+      - .env.local
     ports:
       - "3000:3000"
     environment:
       - NODE_ENV=production
       - NEXT_PUBLIC_BASE_URL=http://localhost:3000
       - SEARXNG_API_URL=http://searxng:8080
-      - LOCAL_REDIS_URL=redis://redis:6379
-      - USE_LOCAL_REDIS=true
-      - OPENAI_COMPATIBLE_API_KEY=${OPENAI_COMPATIBLE_API_KEY}
-      - OPENAI_COMPATIBLE_API_BASE_URL=${OPENAI_COMPATIBLE_API_BASE_URL}
-      - NEXT_PUBLIC_OPENAI_COMPATIBLE_MODEL=${NEXT_PUBLIC_OPENAI_COMPATIBLE_MODEL}
+      - USE_LOCAL_REDIS=false
+      - NEXT_PUBLIC_ENABLE_SAVE_CHAT_HISTORY=false
+      - OPENAI_COMPATIBLE_API_KEY=sk-zhlcboxuerkkmlarpilwzxhixieyumsiokgagcqwfbrfgkxr
+      - OPENAI_COMPATIBLE_API_BASE_URL=https://api.siliconflow.cn/v1
+      - NEXT_PUBLIC_OPENAI_COMPATIBLE_MODEL=Pro/deepseek-ai/DeepSeek-V3
       - SEARXNG_SECRET=${SEARXNG_SECRET}
       - SEARXNG_PORT=${SEARXNG_PORT}
       - SEARXNG_BIND_ADDRESS=${SEARXNG_BIND_ADDRESS}
@@ -26,7 +28,6 @@ services:
       - SEARXNG_ENGINES=${SEARXNG_ENGINES}
       - SEARXNG_TIME_RANGE=${SEARXNG_TIME_RANGE}
       - SEARXNG_SAFESEARCH=${SEARXNG_SAFESEARCH}
-      - NEXT_PUBLIC_ENABLE_SAVE_CHAT_HISTORY=${NEXT_PUBLIC_ENABLE_SAVE_CHAT_HISTORY}
       - NEXT_PUBLIC_ENABLE_SHARE=${NEXT_PUBLIC_ENABLE_SHARE}
     volumes:
       - .:/app
@@ -34,28 +35,12 @@ services:
     networks:
       - default
     depends_on:
-      redis:
-        condition: service_healthy
       searxng:
         condition: service_started
 
-  redis:
-    container_name: redis
-    image: redis:alpine
-    restart: unless-stopped
-    ports:
-      - "6380:6379"
-    networks:
-      - default
-    healthcheck:
-      test: ["CMD", "redis-cli", "ping"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
   searxng:
     container_name: searxng
-    image: searxng/searxng:latest
+    image: docker.io/searxng/searxng:latest
     restart: unless-stopped
     ports:
       - "8080:8080"

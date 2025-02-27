@@ -37,3 +37,7 @@ engines:
 general:
   debug: true
   instance_name: "searxng"
+
+disabled_engines:
+  - qwant
+  - brave
