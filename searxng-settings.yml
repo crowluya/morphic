@@ -41,3 +41,8 @@ general:
 disabled_engines:
   - qwant
   - brave
+  - qwant images
+  - qwant news
+  - qwant videos
+  - library of congress  # 禁用国会图书馆搜索引擎
+  - library of congr

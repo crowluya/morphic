@@ -29,9 +29,9 @@ services:
       - SEARXNG_TIME_RANGE=${SEARXNG_TIME_RANGE}
       - SEARXNG_SAFESEARCH=${SEARXNG_SAFESEARCH}
       - NEXT_PUBLIC_ENABLE_SHARE=${NEXT_PUBLIC_ENABLE_SHARE}
-    volumes:
-      - .:/app
-      - /app/node_modules
+    # volumes:
+    #   - .:/app
+    #   - /app/node_modules
     networks:
       - default
     depends_on:
