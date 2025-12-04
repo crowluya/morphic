@@ -1,7 +1,8 @@
 'use client'
 
-import { useCallback, useState, useTransition } from 'react'
+import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
+import { useCallback, useState, useTransition } from 'react'
 
 import { MoreHorizontal, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
@@ -9,21 +10,21 @@ import { toast } from 'sonner'
 import { clearChats } from '@/lib/actions/chat'
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { SidebarGroupAction } from '@/components/ui/sidebar'
 import { Spinner } from '@/components/ui/spinner'
@@ -33,6 +34,8 @@ interface ClearHistoryActionProps {
 }
 
 export function ClearHistoryAction({ empty }: ClearHistoryActionProps) {
+  const t = useTranslations('sidebar')
+  const tc = useTranslations('common')
   const [isPending, startTransition] = useTransition()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isAlertOpen, setIsAlertOpen] = useState(false)
@@ -42,7 +45,7 @@ export function ClearHistoryAction({ empty }: ClearHistoryActionProps) {
     startTransition(async () => {
       const res = await clearChats()
       if (res?.success) {
-        toast.success('History cleared')
+        toast.success(t('historyCleared'))
         router.push('/')
       } else if (res?.error) {
         toast.error(res.error)
@@ -51,7 +54,7 @@ export function ClearHistoryAction({ empty }: ClearHistoryActionProps) {
       setIsMenuOpen(false)
       window.dispatchEvent(new CustomEvent('chat-history-updated'))
     })
-  }, [startTransition, router])
+  }, [startTransition, router, t])
 
   const handleAlertOpenChange = useCallback(
     (open: boolean) => {
@@ -78,7 +81,7 @@ export function ClearHistoryAction({ empty }: ClearHistoryActionProps) {
       <DropdownMenuTrigger asChild>
         <SidebarGroupAction disabled={empty} className="static size-7 p-1">
           <MoreHorizontal size={16} />
-          <span className="sr-only">History Actions</span>
+          <span className="sr-only">{t('historyActions')}</span>
         </SidebarGroupAction>
       </DropdownMenuTrigger>
 
@@ -92,20 +95,19 @@ export function ClearHistoryAction({ empty }: ClearHistoryActionProps) {
                 event.preventDefault()
               }}
             >
-              <Trash2 size={14} /> Clear History
+              <Trash2 size={14} /> {t('clearHistory')}
             </DropdownMenuItem>
           </AlertDialogTrigger>
 
           <AlertDialogContent>
             <AlertDialogHeader>
-              <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+              <AlertDialogTitle>{t('areYouSure')}</AlertDialogTitle>
               <AlertDialogDescription>
-                This action cannot be undone. It will permanently delete your
-                history.
+                {t('clearHistoryConfirm')}
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel disabled={isPending}>Cancel</AlertDialogCancel>
+              <AlertDialogCancel disabled={isPending}>{tc('cancel')}</AlertDialogCancel>
               <AlertDialogAction
                 disabled={isPending}
                 onClick={event => {
@@ -113,7 +115,7 @@ export function ClearHistoryAction({ empty }: ClearHistoryActionProps) {
                   handleClearAction()
                 }}
               >
-                {isPending ? <Spinner /> : 'Clear'}
+                {isPending ? <Spinner /> : t('clear')}
               </AlertDialogAction>
             </AlertDialogFooter>
           </AlertDialogContent>

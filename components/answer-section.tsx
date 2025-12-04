@@ -5,10 +5,10 @@ import { ChatRequestOptions } from 'ai'
 
 import type { SearchResultItem } from '@/lib/types'
 import type {
-  UIDataTypes,
-  UIMessage,
-  UIMessageMetadata,
-  UITools
+    UIDataTypes,
+    UIMessage,
+    UIMessageMetadata,
+    UITools
 } from '@/lib/types/ai'
 
 import { CollapsibleMessage } from './collapsible-message'
@@ -43,7 +43,7 @@ export function AnswerSection({
   reload,
   citationMaps
 }: AnswerSectionProps) {
-  const enableShare = process.env.NEXT_PUBLIC_SUPABASE_URL !== undefined
+  const enableShare = process.env.ENABLE_AUTH === 'true'
 
   const handleReload = () => {
     if (reload) {

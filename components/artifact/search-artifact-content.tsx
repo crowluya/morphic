@@ -7,8 +7,8 @@ import { SearchResults } from '@/components/search-results'
 import { SearchResultsImageSection } from '@/components/search-results-image'
 import { Section, ToolArgsSection } from '@/components/section'
 import {
-  createVideoSearchResults,
-  VideoSearchResults
+    createVideoSearchResults,
+    VideoSearchResults
 } from '@/components/video-search-results'
 
 export function SearchArtifactContent({ tool }: { tool: ToolPart<'search'> }) {
@@ -25,7 +25,7 @@ export function SearchArtifactContent({ tool }: { tool: ToolPart<'search'> }) {
       (searchResults.images && searchResults.images.length > 0))
 
   if (!hasResults) {
-    return <div className="p-4">No search results</div>
+    return <div className="p-4">{/* No search results */}</div>
   }
 
   return (

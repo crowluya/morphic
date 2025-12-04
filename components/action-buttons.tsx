@@ -1,14 +1,15 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
 
 import {
-  FileText,
-  HelpCircle,
-  LucideIcon,
-  Newspaper,
-  Scale,
-  Search
+    FileText,
+    HelpCircle,
+    LucideIcon,
+    Newspaper,
+    Scale,
+    Search
 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
@@ -20,34 +21,34 @@ const FOCUS_OUT_DELAY_MS = 100 // Delay to ensure focus has actually moved
 
 interface ActionCategory {
   icon: LucideIcon
-  label: string
+  labelKey: string
   key: string
 }
 
 const actionCategories: ActionCategory[] = [
   {
     icon: Search,
-    label: 'Research',
+    labelKey: 'research',
     key: 'research'
   },
   {
     icon: Scale,
-    label: 'Compare',
+    labelKey: 'compare',
     key: 'compare'
   },
   {
     icon: Newspaper,
-    label: 'Latest',
+    labelKey: 'latest',
     key: 'latest'
   },
   {
     icon: FileText,
-    label: 'Summarize',
+    labelKey: 'summarize',
     key: 'summarize'
   },
   {
     icon: HelpCircle,
-    label: 'Explain',
+    labelKey: 'explain',
     key: 'explain'
   }
 ]
@@ -98,12 +99,13 @@ export function ActionButtons({
   inputRef,
   className
 }: ActionButtonsProps) {
+  const t = useTranslations('actions')
   const [activeCategory, setActiveCategory] = useState<string | null>(null)
   const containerRef = useRef<HTMLDivElement>(null)
 
   const handleCategoryClick = (category: ActionCategory) => {
     setActiveCategory(category.key)
-    onCategoryClick(category.label)
+    onCategoryClick(t(category.labelKey))
   }
 
   const handlePromptClick = (prompt: string) => {
@@ -194,7 +196,7 @@ export function ActionButtons({
                   onClick={() => handleCategoryClick(category)}
                 >
                   <Icon className="h-3 w-3 sm:h-4 sm:w-4" />
-                  <span>{category.label}</span>
+                  <span>{t(category.labelKey)}</span>
                 </Button>
               )
             })}

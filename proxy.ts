@@ -1,6 +1,8 @@
+import createIntlMiddleware from 'next-intl/middleware'
 import { type NextRequest, NextResponse } from 'next/server'
+import { routing } from './i18n/routing'
 
-import { updateSession } from '@/lib/supabase/middleware'
+const intlMiddleware = createIntlMiddleware(routing)
 
 export async function proxy(request: NextRequest) {
   // Get the protocol from X-Forwarded-Proto header or request protocol
@@ -14,21 +16,19 @@ export async function proxy(request: NextRequest) {
   // Construct the base URL - ensure protocol has :// format
   const baseUrl = `${protocol}${protocol.endsWith(':') ? '//' : '://'}${host}`
 
-  // Create a response
-  let response: NextResponse
-
-  // Handle Supabase session if configured
-  const supabaseUrl = process.env.NEXT_PUBLIC_SUPABASE_URL
-  const supabaseAnonKey = process.env.NEXT_PUBLIC_SUPABASE_ANON_KEY
-
-  if (supabaseUrl && supabaseAnonKey) {
-    response = await updateSession(request)
-  } else {
-    // If Supabase is not configured, just pass the request through
-    response = NextResponse.next({
-      request
-    })
+  // Skip i18n for API routes and auth API
+  const pathname = request.nextUrl.pathname
+  if (pathname.startsWith('/api/')) {
+    const response = NextResponse.next({ request })
+    response.headers.set('x-url', request.url)
+    response.headers.set('x-host', host)
+    response.headers.set('x-protocol', protocol)
+    response.headers.set('x-base-url', baseUrl)
+    return response
   }
+
+  // Apply i18n middleware for other routes
+  const response = intlMiddleware(request)
 
   // Add request information to response headers
   response.headers.set('x-url', request.url)

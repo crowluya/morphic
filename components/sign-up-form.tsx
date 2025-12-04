@@ -1,18 +1,19 @@
 'use client'
-import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
-import { createClient } from '@/lib/supabase/client'
+import { signUp } from '@/lib/auth/client'
 import { cn } from '@/lib/utils/index'
 
 import { Button } from '@/components/ui/button'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle
 } from '@/components/ui/card'
 import { IconLogo } from '@/components/ui/icons'
 import { Input } from '@/components/ui/input'
@@ -23,7 +24,9 @@ export function SignUpForm({
   className,
   ...props
 }: React.ComponentPropsWithoutRef<'div'>) {
+  const t = useTranslations('auth')
   const [email, setEmail] = useState('')
+  const [name, setName] = useState('')
   const [password, setPassword] = useState('')
   const [repeatPassword, setRepeatPassword] = useState('')
   const [error, setError] = useState<string | null>(null)
@@ -32,26 +35,25 @@ export function SignUpForm({
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault()
-    const supabase = createClient()
     setIsLoading(true)
     setError(null)
 
     if (password !== repeatPassword) {
-      setError('Passwords do not match')
+      setError(t('passwordsNotMatch'))
       setIsLoading(false)
       return
     }
 
     try {
-      const { error } = await supabase.auth.signUp({
+      const { error } = await signUp.email({
         email,
         password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/`
-        }
+        name: name || email.split('@')[0]
       })
-      if (error) throw error
-      router.push('/auth/sign-up-success')
+      if (error) throw new Error(error.message)
+      // Better Auth auto signs in after signup
+      router.push('/')
+      router.refresh()
     } catch (error: unknown) {
       setError(error instanceof Error ? error.message : 'An error occurred')
     } finally {
@@ -68,17 +70,27 @@ export function SignUpForm({
         <CardHeader className="text-center">
           <CardTitle className="text-2xl flex flex-col items-center justify-center gap-4">
             <IconLogo className="size-12" />
-            Create an account
+            {t('createAccount')}
           </CardTitle>
           <CardDescription>
-            Enter your details below to get started
+            {t('enterDetailsToStart')}
           </CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp}>
             <div className="flex flex-col gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="name">{t('name')}</Label>
+                <Input
+                  id="name"
+                  type="text"
+                  placeholder={t('yourName')}
+                  value={name}
+                  onChange={e => setName(e.target.value)}
+                />
+              </div>
+              <div className="grid gap-2">
+                <Label htmlFor="email">{t('email')}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -90,7 +102,7 @@ export function SignUpForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t('password')}</Label>
                 </div>
                 <PasswordInput
                   id="password"
@@ -103,7 +115,7 @@ export function SignUpForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="repeat-password">Repeat Password</Label>
+                  <Label htmlFor="repeat-password">{t('repeatPassword')}</Label>
                 </div>
                 <PasswordInput
                   id="repeat-password"
@@ -116,13 +128,13 @@ export function SignUpForm({
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Creating account...' : 'Sign Up'}
+                {isLoading ? t('creatingAccount') : t('signUp')}
               </Button>
             </div>
             <div className="mt-6 text-center text-sm">
-              Already have an account?{' '}
+              {t('alreadyHaveAccount')}{' '}
               <Link href="/auth/login" className="underline underline-offset-4">
-                Sign In
+                {t('signIn')}
               </Link>
             </div>
           </form>
@@ -130,7 +142,7 @@ export function SignUpForm({
       </Card>
       <div className="text-center text-xs text-muted-foreground">
         <Link href="/" className="hover:underline">
-          &larr; Back to Home
+          &larr; {t('backToHome')}
         </Link>
       </div>
     </div>

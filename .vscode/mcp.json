@@ -1,0 +1,11 @@
+{
+  "servers": {
+    "chrome-mcp-stdio": {
+      "command": "npx",
+      "args": [
+        "node",
+        "C:\\Users\\luya\\AppData\\Local\\pnpm\\global\\5\\node_modules\\mcp-chrome-bridge\\dist\\mcp\\mcp-server-stdio.js"
+      ]
+    }
+  }
+}

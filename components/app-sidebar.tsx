@@ -1,26 +1,29 @@
-import { Suspense } from 'react'
+import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
+import { Suspense } from 'react'
 
 import { Plus } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
 import {
-  Sidebar,
-  SidebarContent,
-  SidebarHeader,
-  SidebarMenu,
-  SidebarMenuButton,
-  SidebarMenuItem,
-  SidebarRail,
-  SidebarTrigger
+    Sidebar,
+    SidebarContent,
+    SidebarHeader,
+    SidebarMenu,
+    SidebarMenuButton,
+    SidebarMenuItem,
+    SidebarRail,
+    SidebarTrigger
 } from '@/components/ui/sidebar'
 
 import { ChatHistorySection } from './sidebar/chat-history-section'
 import { ChatHistorySkeleton } from './sidebar/chat-history-skeleton'
 import { IconLogo } from './ui/icons'
 
-export default function AppSidebar() {
+export default async function AppSidebar() {
+  const t = await getTranslations('sidebar')
+  
   return (
     <Sidebar side="left" variant="sidebar" collapsible="offcanvas">
       <SidebarHeader className="flex flex-row justify-between items-center">
@@ -36,7 +39,7 @@ export default function AppSidebar() {
             <SidebarMenuButton asChild>
               <Link href="/" className="flex items-center gap-2">
                 <Plus className="size-4" />
-                <span>New</span>
+                <span>{t('newChat')}</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

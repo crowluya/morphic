@@ -1,11 +1,11 @@
 {
-  "id": "bd2133a6-1281-44a1-8619-c1f0407dfb77",
+  "id": "d3f5c335-5898-41e9-86a3-81c872a2a1d8",
   "prevId": "00000000-0000-0000-0000-000000000000",
   "version": "7",
   "dialect": "postgresql",
   "tables": {
-    "public.chats": {
-      "name": "chats",
+    "public.morphic_chats": {
+      "name": "morphic_chats",
       "schema": "",
       "columns": {
         "id": {
@@ -41,16 +41,215 @@
           "default": "'private'"
         }
       },
-      "indexes": {},
+      "indexes": {
+        "chats_user_id_idx": {
+          "name": "chats_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "chats_user_id_created_at_idx": {
+          "name": "chats_user_id_created_at_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "chats_created_at_idx": {
+          "name": "chats_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": false,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "chats_id_user_id_idx": {
+          "name": "chats_id_user_id_idx",
+          "columns": [
+            {
+              "expression": "id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            },
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
       "foreignKeys": {},
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "policies": {},
+      "policies": {
+        "users_manage_own_chats": {
+          "name": "users_manage_own_chats",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "user_id = current_setting('app.current_user_id', true)",
+          "withCheck": "user_id = current_setting('app.current_user_id', true)"
+        },
+        "public_chats_readable": {
+          "name": "public_chats_readable",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "public"
+          ],
+          "using": "visibility = 'public'"
+        }
+      },
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     },
-    "public.messages": {
-      "name": "messages",
+    "public.morphic_feedback": {
+      "name": "morphic_feedback",
+      "schema": "",
+      "columns": {
+        "id": {
+          "name": "id",
+          "type": "varchar(191)",
+          "primaryKey": true,
+          "notNull": true
+        },
+        "user_id": {
+          "name": "user_id",
+          "type": "varchar(255)",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "sentiment": {
+          "name": "sentiment",
+          "type": "varchar(256)",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "message": {
+          "name": "message",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "page_url": {
+          "name": "page_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": true
+        },
+        "user_agent": {
+          "name": "user_agent",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "created_at": {
+          "name": "created_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": true,
+          "default": "now()"
+        }
+      },
+      "indexes": {
+        "feedback_user_id_idx": {
+          "name": "feedback_user_id_idx",
+          "columns": [
+            {
+              "expression": "user_id",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        },
+        "feedback_created_at_idx": {
+          "name": "feedback_created_at_idx",
+          "columns": [
+            {
+              "expression": "created_at",
+              "isExpression": false,
+              "asc": true,
+              "nulls": "last"
+            }
+          ],
+          "isUnique": false,
+          "concurrently": false,
+          "method": "btree",
+          "with": {}
+        }
+      },
+      "foreignKeys": {},
+      "compositePrimaryKeys": {},
+      "uniqueConstraints": {},
+      "policies": {
+        "feedback_select_policy": {
+          "name": "feedback_select_policy",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "public"
+          ],
+          "using": "true"
+        },
+        "anyone_can_insert_feedback": {
+          "name": "anyone_can_insert_feedback",
+          "as": "PERMISSIVE",
+          "for": "INSERT",
+          "to": [
+            "public"
+          ],
+          "withCheck": "true"
+        }
+      },
+      "checkConstraints": {},
+      "isRLSEnabled": true
+    },
+    "public.morphic_messages": {
+      "name": "morphic_messages",
       "schema": "",
       "columns": {
         "id": {
@@ -77,6 +276,18 @@
           "primaryKey": false,
           "notNull": true,
           "default": "now()"
+        },
+        "updated_at": {
+          "name": "updated_at",
+          "type": "timestamp",
+          "primaryKey": false,
+          "notNull": false
+        },
+        "metadata": {
+          "name": "metadata",
+          "type": "jsonb",
+          "primaryKey": false,
+          "notNull": false
         }
       },
       "indexes": {
@@ -118,24 +329,48 @@
         }
       },
       "foreignKeys": {
-        "messages_chat_id_chats_id_fk": {
-          "name": "messages_chat_id_chats_id_fk",
-          "tableFrom": "messages",
-          "tableTo": "chats",
-          "columnsFrom": ["chat_id"],
-          "columnsTo": ["id"],
+        "morphic_messages_chat_id_morphic_chats_id_fk": {
+          "name": "morphic_messages_chat_id_morphic_chats_id_fk",
+          "tableFrom": "morphic_messages",
+          "tableTo": "morphic_chats",
+          "columnsFrom": [
+            "chat_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "policies": {},
+      "policies": {
+        "users_manage_chat_messages": {
+          "name": "users_manage_chat_messages",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "EXISTS (\n        SELECT 1 FROM \"morphic_chats\"\n        WHERE \"morphic_chats\".id = chat_id\n        AND \"morphic_chats\".user_id = current_setting('app.current_user_id', true)\n      )",
+          "withCheck": "EXISTS (\n        SELECT 1 FROM \"morphic_chats\"\n        WHERE \"morphic_chats\".id = chat_id\n        AND \"morphic_chats\".user_id = current_setting('app.current_user_id', true)\n      )"
+        },
+        "public_chat_messages_readable": {
+          "name": "public_chat_messages_readable",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "public"
+          ],
+          "using": "EXISTS (\n        SELECT 1 FROM \"morphic_chats\"\n        WHERE \"morphic_chats\".id = chat_id\n        AND \"morphic_chats\".visibility = 'public'\n      )"
+        }
+      },
       "checkConstraints": {},
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     },
-    "public.parts": {
-      "name": "parts",
+    "public.morphic_parts": {
+      "name": "morphic_parts",
       "schema": "",
       "columns": {
         "id": {
@@ -419,19 +654,43 @@
         }
       },
       "foreignKeys": {
-        "parts_message_id_messages_id_fk": {
-          "name": "parts_message_id_messages_id_fk",
-          "tableFrom": "parts",
-          "tableTo": "messages",
-          "columnsFrom": ["message_id"],
-          "columnsTo": ["id"],
+        "morphic_parts_message_id_morphic_messages_id_fk": {
+          "name": "morphic_parts_message_id_morphic_messages_id_fk",
+          "tableFrom": "morphic_parts",
+          "tableTo": "morphic_messages",
+          "columnsFrom": [
+            "message_id"
+          ],
+          "columnsTo": [
+            "id"
+          ],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
       "uniqueConstraints": {},
-      "policies": {},
+      "policies": {
+        "users_manage_message_parts": {
+          "name": "users_manage_message_parts",
+          "as": "PERMISSIVE",
+          "for": "ALL",
+          "to": [
+            "public"
+          ],
+          "using": "EXISTS (\n        SELECT 1 FROM \"morphic_messages\"\n        INNER JOIN \"morphic_chats\" ON \"morphic_chats\".id = \"morphic_messages\".chat_id\n        WHERE \"morphic_messages\".id = message_id\n        AND \"morphic_chats\".user_id = current_setting('app.current_user_id', true)\n      )",
+          "withCheck": "EXISTS (\n        SELECT 1 FROM \"morphic_messages\"\n        INNER JOIN \"morphic_chats\" ON \"morphic_chats\".id = \"morphic_messages\".chat_id\n        WHERE \"morphic_messages\".id = message_id\n        AND \"morphic_chats\".user_id = current_setting('app.current_user_id', true)\n      )"
+        },
+        "public_chat_parts_readable": {
+          "name": "public_chat_parts_readable",
+          "as": "PERMISSIVE",
+          "for": "SELECT",
+          "to": [
+            "public"
+          ],
+          "using": "EXISTS (\n        SELECT 1 FROM \"morphic_messages\"\n        INNER JOIN \"morphic_chats\" ON \"morphic_chats\".id = \"morphic_messages\".chat_id\n        WHERE \"morphic_messages\".id = message_id\n        AND \"morphic_chats\".visibility = 'public'\n      )"
+        }
+      },
       "checkConstraints": {
         "text_text_required": {
           "name": "text_text_required",
@@ -454,7 +713,7 @@
           "value": "(type NOT LIKE 'tool-%' OR (tool_tool_call_id IS NOT NULL AND tool_state IS NOT NULL))"
         }
       },
-      "isRLSEnabled": false
+      "isRLSEnabled": true
     }
   },
   "enums": {},

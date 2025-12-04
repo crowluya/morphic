@@ -3,6 +3,7 @@ import { BraveSearchProvider } from './brave'
 import { ExaSearchProvider } from './exa'
 import { FirecrawlSearchProvider } from './firecrawl'
 import { SearXNGSearchProvider } from './searxng'
+import { SerperSearchProvider } from './serper'
 import { TavilySearchProvider } from './tavily'
 
 export type SearchProviderType =
@@ -11,7 +12,10 @@ export type SearchProviderType =
   | 'searxng'
   | 'firecrawl'
   | 'brave'
-export const DEFAULT_PROVIDER: SearchProviderType = 'tavily'
+  | 'serper'
+
+// Default to Serper as primary search provider
+export const DEFAULT_PROVIDER: SearchProviderType = 'serper'
 
 export function createSearchProvider(
   type?: SearchProviderType
@@ -20,6 +24,8 @@ export function createSearchProvider(
     type || (process.env.SEARCH_API as SearchProviderType) || DEFAULT_PROVIDER
 
   switch (providerType) {
+    case 'serper':
+      return new SerperSearchProvider()
     case 'tavily':
       return new TavilySearchProvider()
     case 'exa':
@@ -31,8 +37,8 @@ export function createSearchProvider(
     case 'firecrawl':
       return new FirecrawlSearchProvider()
     default:
-      // Default to TavilySearchProvider if an unknown provider is specified
-      return new TavilySearchProvider()
+      // Default to SerperSearchProvider
+      return new SerperSearchProvider()
   }
 }
 
@@ -40,5 +46,7 @@ export { BraveSearchProvider } from './brave'
 export type { ExaSearchProvider } from './exa'
 export type { FirecrawlSearchProvider } from './firecrawl'
 export { SearXNGSearchProvider } from './searxng'
+export { SerperSearchProvider } from './serper'
 export { TavilySearchProvider } from './tavily'
 export type { SearchProvider }
+

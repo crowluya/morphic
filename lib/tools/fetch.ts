@@ -2,6 +2,7 @@ import { tool, UIToolInvocation } from 'ai'
 
 import { fetchSchema } from '@/lib/schema/fetch'
 import { SearchResults as SearchResultsType } from '@/lib/types'
+import { serperScrape } from './search/providers/serper'
 
 const CONTENT_CHARACTER_LIMIT = 50000
 const TITLE_CHARACTER_LIMIT = 100
@@ -157,9 +158,37 @@ async function fetchTavilyExtractData(url: string): Promise<SearchResultsType> {
   }
 }
 
+async function fetchSerperData(url: string): Promise<SearchResultsType> {
+  try {
+    const data = await serperScrape(url)
+
+    const title =
+      data.metadata?.title ||
+      data.metadata?.['og:title'] ||
+      new URL(url).hostname
+
+    const content = data.text.slice(0, CONTENT_CHARACTER_LIMIT)
+
+    return {
+      results: [
+        {
+          title: title.slice(0, TITLE_CHARACTER_LIMIT),
+          content,
+          url
+        }
+      ],
+      query: '',
+      images: []
+    }
+  } catch (error) {
+    console.error('Serper Scrape API Error:', error)
+    throw error instanceof Error ? error : new Error('Serper Scrape API failed')
+  }
+}
+
 export const fetchTool = tool({
   description:
-    'Fetch content from any URL. By default uses "regular" type which performs fast, direct HTML fetching without external APIs - ideal for most websites. IMPORTANT: "regular" type does NOT support PDFs and will fail on PDF URLs. Use "api" type when you need: 1) PDF content extraction (required for .pdf URLs), 2) Complex JavaScript-rendered pages, 3) Better markdown formatting, 4) Table extraction. The "api" type requires Jina or Tavily API keys and uses Jina Reader if available, otherwise falls back to Tavily Extract.',
+    'Fetch content from any URL. By default uses "regular" type which performs fast, direct HTML fetching without external APIs - ideal for most websites. IMPORTANT: "regular" type does NOT support PDFs and will fail on PDF URLs. Use "api" type when you need: 1) PDF content extraction (required for .pdf URLs), 2) Complex JavaScript-rendered pages, 3) Better markdown formatting, 4) Table extraction. The "api" type uses Serper Scrape if available, otherwise Jina Reader or Tavily Extract.',
   inputSchema: fetchSchema,
   async *execute({ url, type = 'regular' }) {
     // Yield initial fetching state
@@ -174,9 +203,13 @@ export const fetchTool = tool({
       // Use regular fetch for direct HTML retrieval
       results = await fetchRegularData(url)
     } else {
-      // Use API-based extraction (Jina or Tavily)
+      // Use API-based extraction - prefer Serper, then Jina, then Tavily
+      const useSerper = process.env.SERPER_API_KEY
       const useJina = process.env.JINA_API_KEY
-      if (useJina) {
+
+      if (useSerper) {
+        results = await fetchSerperData(url)
+      } else if (useJina) {
         results = await fetchJinaReaderData(url)
       } else {
         results = await fetchTavilyExtractData(url)

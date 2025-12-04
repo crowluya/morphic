@@ -1,16 +1,16 @@
 import { createId } from '@paralleldrive/cuid2'
 import { InferSelectModel, sql } from 'drizzle-orm'
 import {
-  check,
-  index,
-  integer,
-  json,
-  jsonb,
-  pgPolicy,
-  pgTable,
-  text,
-  timestamp,
-  varchar
+    check,
+    index,
+    integer,
+    json,
+    jsonb,
+    pgPolicy,
+    pgTable,
+    text,
+    timestamp,
+    varchar
 } from 'drizzle-orm/pg-core'
 
 // Constants
@@ -22,9 +22,9 @@ const FILENAME_LENGTH = 1024
 // ID generation function
 export const generateId = () => createId()
 
-// Chats table
+// Chats table (with morphic_ prefix for shared database)
 export const chats = pgTable(
-  'chats',
+  'morphic_chats',
   {
     id: varchar('id', { length: ID_LENGTH })
       .primaryKey()
@@ -69,9 +69,9 @@ export const chats = pgTable(
 
 export type Chat = InferSelectModel<typeof chats>
 
-// Messages table (simplified)
+// Messages table (with morphic_ prefix for shared database)
 export const messages = pgTable(
-  'messages',
+  'morphic_messages',
   {
     id: varchar('id', { length: ID_LENGTH })
       .primaryKey()
@@ -119,9 +119,9 @@ export const messages = pgTable(
 
 export type Message = InferSelectModel<typeof messages>
 
-// Parts table
+// Parts table (with morphic_ prefix for shared database)
 export const parts = pgTable(
-  'parts',
+  'morphic_parts',
   {
     id: varchar('id', { length: ID_LENGTH })
       .primaryKey()
@@ -258,9 +258,9 @@ export const parts = pgTable(
 export type Part = InferSelectModel<typeof parts>
 export type NewPart = typeof parts.$inferInsert
 
-// Feedback table
+// Feedback table (with morphic_ prefix for shared database)
 export const feedback = pgTable(
-  'feedback',
+  'morphic_feedback',
   {
     id: varchar('id', { length: ID_LENGTH })
       .primaryKey()

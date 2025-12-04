@@ -5,11 +5,18 @@ import { createOpenAI, openai } from '@ai-sdk/openai'
 import { createProviderRegistry, LanguageModel } from 'ai'
 import { createOllama } from 'ollama-ai-provider-v2'
 
+// Create OpenRouter provider (OpenAI compatible)
+const openrouter = createOpenAI({
+  apiKey: process.env.OPENAI_API_KEY,
+  baseURL: process.env.OPENAI_BASE_URL || 'https://openrouter.ai/api/v1'
+})
+
 // Build providers object conditionally
 const providers: Record<string, any> = {
   openai,
   anthropic,
   google,
+  openrouter, // Add OpenRouter as a provider
   'openai-compatible': createOpenAI({
     apiKey: process.env.OPENAI_COMPATIBLE_API_KEY,
     baseURL: process.env.OPENAI_COMPATIBLE_API_BASE_URL
@@ -37,7 +44,9 @@ export function getModel(model: string): LanguageModel {
 export function isProviderEnabled(providerId: string): boolean {
   switch (providerId) {
     case 'openai':
-      return !!process.env.OPENAI_API_KEY
+      return !!process.env.OPENAI_API_KEY && !process.env.OPENAI_BASE_URL
+    case 'openrouter':
+      return !!process.env.OPENAI_API_KEY && !!process.env.OPENAI_BASE_URL
     case 'anthropic':
       return !!process.env.ANTHROPIC_API_KEY
     case 'google':

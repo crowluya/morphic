@@ -1,30 +1,36 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 
 import {
-  Link2,
-  LogIn,
-  Palette,
-  Settings2 // Or EllipsisVertical, etc.
+    Globe,
+    Link2,
+    LogIn,
+    Palette,
+    Settings2 // Or EllipsisVertical, etc.
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 
 import { ExternalLinkItems } from './external-link-items'
+import { LanguageMenuItems } from './language-menu-items'
 import { ThemeMenuItems } from './theme-menu-items'
 
 export default function GuestMenu() {
+  const t = useTranslations('auth')
+  const ts = useTranslations('settings')
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -37,14 +43,14 @@ export default function GuestMenu() {
         <DropdownMenuItem asChild>
           <Link href="/auth/login">
             <LogIn className="mr-2 h-4 w-4" />
-            <span>Sign In</span>
+            <span>{t('signIn')}</span>
           </Link>
         </DropdownMenuItem>
         <DropdownMenuSeparator />
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <Palette className="mr-2 h-4 w-4" />
-            <span>Theme</span>
+            <span>{ts('theme')}</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <ThemeMenuItems />
@@ -52,8 +58,17 @@ export default function GuestMenu() {
         </DropdownMenuSub>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
+            <Globe className="mr-2 h-4 w-4" />
+            <span>{ts('language')}</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <LanguageMenuItems />
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
             <Link2 className="mr-2 h-4 w-4" />
-            <span>Links</span>
+            <span>{ts('links')}</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <ExternalLinkItems />

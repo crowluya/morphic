@@ -1,8 +1,9 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
+import { useRouter } from 'next/navigation'
 import { useCallback, useEffect, useRef, useState } from 'react'
 import Textarea from 'react-textarea-autosize'
-import { useRouter } from 'next/navigation'
 
 import { UseChatHelpers } from '@ai-sdk/react'
 import { ArrowUp, ChevronDown, MessageCirclePlus, Square } from 'lucide-react'
@@ -12,13 +13,13 @@ import { UploadedFile } from '@/lib/types'
 import type { UIDataTypes, UIMessage, UITools } from '@/lib/types/ai'
 import { cn } from '@/lib/utils'
 
-import { useArtifact } from './artifact/artifact-context'
-import { Button } from './ui/button'
-import { IconLogo } from './ui/icons'
 import { ActionButtons } from './action-buttons'
+import { useArtifact } from './artifact/artifact-context'
 import { FileUploadButton } from './file-upload-button'
 import { ModelTypeSelector } from './model-type-selector'
 import { SearchModeSelector } from './search-mode-selector'
+import { Button } from './ui/button'
+import { IconLogo } from './ui/icons'
 import { UploadedFileList } from './uploaded-file-list'
 
 // Constants for timing delays
@@ -62,6 +63,7 @@ export function ChatPanel({
   scrollContainerRef,
   onNewChat
 }: ChatPanelProps) {
+  const t = useTranslations('search')
   const router = useRouter()
   const inputRef = useRef<HTMLTextAreaElement>(null)
   const isFirstRender = useRef(true)
@@ -171,7 +173,7 @@ export function ChatPanel({
             size="icon"
             className="absolute -top-10 right-4 z-20 size-8 rounded-full shadow-md"
             onClick={handleScrollToBottom}
-            title="Scroll to bottom"
+            title={t('scrollToBottom')}
           >
             <ChevronDown size={16} />
           </Button>
@@ -194,7 +196,7 @@ export function ChatPanel({
             onCompositionEnd={handleCompositionEnd}
             onFocus={() => setIsInputFocused(true)}
             onBlur={() => setIsInputFocused(false)}
-            placeholder="Ask anything..."
+            placeholder={t('placeholder')}
             spellCheck={false}
             value={input}
             disabled={isLoading || isToolInvocationInProgress()}

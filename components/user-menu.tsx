@@ -1,28 +1,30 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
 
-import { User } from '@supabase/supabase-js'
-import { Link2, LogOut, Palette } from 'lucide-react'
+import { Globe, Link2, LogOut, Palette } from 'lucide-react'
 
-import { createClient } from '@/lib/supabase/client'
+import type { User } from '@/lib/auth'
+import { signOut } from '@/lib/auth/client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuSub,
-  DropdownMenuSubContent,
-  DropdownMenuSubTrigger,
-  DropdownMenuTrigger
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuLabel,
+    DropdownMenuSeparator,
+    DropdownMenuSub,
+    DropdownMenuSubContent,
+    DropdownMenuSubTrigger,
+    DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 
-import { Button } from './ui/button'
 import { ExternalLinkItems } from './external-link-items'
+import { LanguageMenuItems } from './language-menu-items'
 import { ThemeMenuItems } from './theme-menu-items'
+import { Button } from './ui/button'
 
 interface UserMenuProps {
   user: User
@@ -30,10 +32,9 @@ interface UserMenuProps {
 
 export default function UserMenu({ user }: UserMenuProps) {
   const router = useRouter()
-  const userName =
-    user.user_metadata?.full_name || user.user_metadata?.name || 'User'
-  const avatarUrl =
-    user.user_metadata?.avatar_url || user.user_metadata?.picture
+  const t = useTranslations('settings')
+  const userName = user.name || 'User'
+  const avatarUrl = user.image
 
   const getInitials = (name: string, email: string | undefined) => {
     if (name && name !== 'User') {
@@ -50,8 +51,7 @@ export default function UserMenu({ user }: UserMenuProps) {
   }
 
   const handleLogout = async () => {
-    const supabase = createClient()
-    await supabase.auth.signOut()
+    await signOut()
     router.push('/')
     router.refresh()
   }
@@ -81,7 +81,7 @@ export default function UserMenu({ user }: UserMenuProps) {
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
             <Palette className="mr-2 h-4 w-4" />
-            <span>Theme</span>
+            <span>{t('theme')}</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <ThemeMenuItems />
@@ -89,8 +89,17 @@ export default function UserMenu({ user }: UserMenuProps) {
         </DropdownMenuSub>
         <DropdownMenuSub>
           <DropdownMenuSubTrigger>
+            <Globe className="mr-2 h-4 w-4" />
+            <span>{t('language')}</span>
+          </DropdownMenuSubTrigger>
+          <DropdownMenuSubContent>
+            <LanguageMenuItems />
+          </DropdownMenuSubContent>
+        </DropdownMenuSub>
+        <DropdownMenuSub>
+          <DropdownMenuSubTrigger>
             <Link2 className="mr-2 h-4 w-4" />
-            <span>Links</span>
+            <span>{t('links')}</span>
           </DropdownMenuSubTrigger>
           <DropdownMenuSubContent>
             <ExternalLinkItems />
@@ -99,7 +108,7 @@ export default function UserMenu({ user }: UserMenuProps) {
         <DropdownMenuSeparator />
         <DropdownMenuItem onClick={handleLogout}>
           <LogOut className="mr-2 h-4 w-4" />
-          <span>Logout</span>
+          <span>{t('logout')}</span>
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

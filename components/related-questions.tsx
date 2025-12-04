@@ -1,15 +1,16 @@
 'use client'
 
+import { useTranslations } from 'next-intl'
 import React from 'react'
 
 import { ArrowRight } from 'lucide-react'
 
 import type { RelatedQuestionsData } from '@/lib/types/ai'
 
-import { Button } from './ui/button'
-import { Skeleton } from './ui/skeleton'
 import { CollapsibleMessage } from './collapsible-message'
 import { Section } from './section'
+import { Button } from './ui/button'
+import { Skeleton } from './ui/skeleton'
 
 interface RelatedQuestionsProps {
   data: RelatedQuestionsData
@@ -20,6 +21,8 @@ export const RelatedQuestions: React.FC<RelatedQuestionsProps> = ({
   data,
   onQuerySelect
 }) => {
+  const t = useTranslations('search')
+  
   const renderQuestionButtons = (questions: Array<{ question: string }>) =>
     questions.map((item, index) => (
       <div className="flex items-start w-full" key={index}>
@@ -46,7 +49,7 @@ export const RelatedQuestions: React.FC<RelatedQuestionsProps> = ({
       showIcon={false}
       showBorder={false}
     >
-      <Section title="Related" className="pt-0 pb-4">
+      <Section title={t('related')} className="pt-0 pb-4">
         <div className="flex flex-col gap-2">
           {data.status === 'streaming' && data.questions && (
             // Show received questions immediately while the rest stream
@@ -79,7 +82,7 @@ export const RelatedQuestions: React.FC<RelatedQuestionsProps> = ({
 
           {data.status === 'error' && (
             <div className="text-sm text-muted-foreground">
-              Failed to generate related questions
+              {t('failedRelated')}
             </div>
           )}
 

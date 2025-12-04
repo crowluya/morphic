@@ -1,19 +1,19 @@
 'use client'
 
 // import Link from 'next/link' // No longer needed directly here for Sign In button
-import React, { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import { usePathname } from 'next/navigation'
+import React, { useState } from 'react'
 
-import { User } from '@supabase/supabase-js'
-
+import type { User } from '@/lib/auth'
 import { cn } from '@/lib/utils'
 
 import { useSidebar } from '@/components/ui/sidebar'
 
-import { Button } from './ui/button'
 import { FeedbackModal } from './feedback-modal'
+import { Button } from './ui/button'
 // import { Button } from './ui/button' // No longer needed directly here for Sign In button
-import GuestMenu from './guest-menu' // Import the new GuestMenu component
+import GuestMenu from './guest-menu'; // Import the new GuestMenu component
 import UserMenu from './user-menu'
 
 interface HeaderProps {
@@ -21,6 +21,7 @@ interface HeaderProps {
 }
 
 export const Header: React.FC<HeaderProps> = ({ user }) => {
+  const t = useTranslations('common')
   const { open } = useSidebar()
   const pathname = usePathname()
   const [feedbackOpen, setFeedbackOpen] = useState(false)
@@ -45,7 +46,7 @@ export const Header: React.FC<HeaderProps> = ({ user }) => {
               size="sm"
               onClick={() => setFeedbackOpen(true)}
             >
-              Feedback
+              {t('feedback')}
             </Button>
           )}
           {user ? <UserMenu user={user} /> : <GuestMenu />}

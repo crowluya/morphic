@@ -1,8 +1,9 @@
 'use client'
 
-import { useCallback, useState, useTransition } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
+import { useCallback, useState, useTransition } from 'react'
 
 import { MoreHorizontal, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
@@ -11,26 +12,26 @@ import { deleteChat } from '@/lib/actions/chat'
 import { Chat as DBChat } from '@/lib/db/schema'
 
 import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+    AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger
+    DropdownMenu,
+    DropdownMenuContent,
+    DropdownMenuItem,
+    DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import {
-  SidebarMenuAction,
-  SidebarMenuButton,
-  SidebarMenuItem
+    SidebarMenuAction,
+    SidebarMenuButton,
+    SidebarMenuItem
 } from '@/components/ui/sidebar'
 
 import { Spinner } from '../ui/spinner'
@@ -39,45 +40,11 @@ interface ChatMenuItemProps {
   chat: DBChat
 }
 
-const formatDateWithTime = (date: Date | string) => {
-  const parsedDate = new Date(date)
-  const now = new Date()
-  const yesterday = new Date()
-  yesterday.setDate(yesterday.getDate() - 1)
-
-  const formatTime = (date: Date) => {
-    return date.toLocaleString('en-US', {
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    })
-  }
-
-  if (
-    parsedDate.getDate() === now.getDate() &&
-    parsedDate.getMonth() === now.getMonth() &&
-    parsedDate.getFullYear() === now.getFullYear()
-  ) {
-    return `Today, ${formatTime(parsedDate)}`
-  } else if (
-    parsedDate.getDate() === yesterday.getDate() &&
-    parsedDate.getMonth() === yesterday.getMonth() &&
-    parsedDate.getFullYear() === yesterday.getFullYear()
-  ) {
-    return `Yesterday, ${formatTime(parsedDate)}`
-  } else {
-    return parsedDate.toLocaleString('en-US', {
-      year: 'numeric',
-      month: '2-digit',
-      day: '2-digit',
-      hour: '2-digit',
-      minute: '2-digit',
-      hour12: true
-    })
-  }
-}
-
 export function ChatMenuItem({ chat }: ChatMenuItemProps) {
+  const t = useTranslations('chat')
+  const tc = useTranslations('common')
+  const ts = useTranslations('sidebar')
+  const locale = useLocale()
   const pathname = usePathname()
   const path = `/search/${chat.id}`
   const isActive = pathname === path
@@ -86,12 +53,50 @@ export function ChatMenuItem({ chat }: ChatMenuItemProps) {
   const [isMenuOpen, setIsMenuOpen] = useState(false)
   const [isAlertOpen, setIsAlertOpen] = useState(false)
 
+  const formatDateWithTime = (date: Date | string) => {
+    const parsedDate = new Date(date)
+    const now = new Date()
+    const yesterday = new Date()
+    yesterday.setDate(yesterday.getDate() - 1)
+
+    const formatTime = (date: Date) => {
+      return date.toLocaleString(locale === 'zh' ? 'zh-CN' : 'en-US', {
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: locale !== 'zh'
+      })
+    }
+
+    if (
+      parsedDate.getDate() === now.getDate() &&
+      parsedDate.getMonth() === now.getMonth() &&
+      parsedDate.getFullYear() === now.getFullYear()
+    ) {
+      return `${t('today')}, ${formatTime(parsedDate)}`
+    } else if (
+      parsedDate.getDate() === yesterday.getDate() &&
+      parsedDate.getMonth() === yesterday.getMonth() &&
+      parsedDate.getFullYear() === yesterday.getFullYear()
+    ) {
+      return `${t('yesterday')}, ${formatTime(parsedDate)}`
+    } else {
+      return parsedDate.toLocaleString(locale === 'zh' ? 'zh-CN' : 'en-US', {
+        year: 'numeric',
+        month: '2-digit',
+        day: '2-digit',
+        hour: '2-digit',
+        minute: '2-digit',
+        hour12: locale !== 'zh'
+      })
+    }
+  }
+
   const handleDeleteChat = useCallback(() => {
     startTransition(async () => {
       const result = await deleteChat(chat.id)
 
       if (result?.success) {
-        toast.success('Chat deleted')
+        toast.success(t('chatDeleted'))
         if (isActive) {
           router.push('/')
         }
@@ -104,7 +109,7 @@ export function ChatMenuItem({ chat }: ChatMenuItemProps) {
       setIsAlertOpen(false)
       setIsMenuOpen(false)
     })
-  }, [chat.id, isActive, router, startTransition])
+  }, [chat.id, isActive, router, startTransition, t])
 
   const handleAlertOpenChange = useCallback(
     (open: boolean) => {
@@ -147,7 +152,7 @@ export function ChatMenuItem({ chat }: ChatMenuItemProps) {
         <DropdownMenuTrigger asChild>
           <SidebarMenuAction className="size-7 p-1 mr-1">
             <MoreHorizontal size={16} />
-            <span className="sr-only">Chat Actions</span>
+            <span className="sr-only">{t('chatActions')}</span>
           </SidebarMenuAction>
         </DropdownMenuTrigger>
         <DropdownMenuContent side="right" align="start">
@@ -160,20 +165,19 @@ export function ChatMenuItem({ chat }: ChatMenuItemProps) {
                 }}
               >
                 <Trash2 size={14} />
-                Delete Chat
+                {t('deleteChat')}
               </DropdownMenuItem>
             </AlertDialogTrigger>
             <AlertDialogContent>
               <AlertDialogHeader>
-                <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                <AlertDialogTitle>{ts('areYouSure')}</AlertDialogTitle>
                 <AlertDialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  this chat history.
+                  {t('deleteChatConfirm')}
                 </AlertDialogDescription>
               </AlertDialogHeader>
               <AlertDialogFooter>
                 <AlertDialogCancel disabled={isPending}>
-                  Cancel
+                  {tc('cancel')}
                 </AlertDialogCancel>
                 <AlertDialogAction
                   disabled={isPending}
@@ -188,7 +192,7 @@ export function ChatMenuItem({ chat }: ChatMenuItemProps) {
                       <Spinner />
                     </div>
                   ) : (
-                    'Delete'
+                    tc('delete')
                   )}
                 </AlertDialogAction>
               </AlertDialogFooter>

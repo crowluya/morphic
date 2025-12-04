@@ -1,19 +1,20 @@
 'use client'
 
-import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
+import { useState } from 'react'
 
-import { createClient } from '@/lib/supabase/client'
+import { signIn } from '@/lib/auth/client'
 import { cn } from '@/lib/utils/index'
 
 import { Button } from '@/components/ui/button'
 import {
-  Card,
-  CardContent,
-  CardDescription,
-  CardHeader,
-  CardTitle
+    Card,
+    CardContent,
+    CardDescription,
+    CardHeader,
+    CardTitle
 } from '@/components/ui/card'
 import { IconLogo } from '@/components/ui/icons'
 import { Input } from '@/components/ui/input'
@@ -30,19 +31,19 @@ export function LoginForm({
   const [error, setError] = useState<string | null>(null)
   const [isLoading, setIsLoading] = useState(false)
   const router = useRouter()
+  const t = useTranslations('auth')
 
   const handleLogin = async (e: React.FormEvent) => {
     e.preventDefault()
-    const supabase = createClient()
     setIsLoading(true)
     setError(null)
 
     try {
-      const { error } = await supabase.auth.signInWithPassword({
+      const { error } = await signIn.email({
         email,
         password
       })
-      if (error) throw error
+      if (error) throw new Error(error.message)
       // Redirect to root and refresh to ensure server components get updated session
       router.push('/')
       router.refresh()
@@ -54,23 +55,18 @@ export function LoginForm({
   }
 
   const handleSocialLogin = async () => {
-    const supabase = createClient()
     setIsLoading(true)
     setError(null)
 
     try {
-      const { error } = await supabase.auth.signInWithOAuth({
+      await signIn.social({
         provider: 'google',
-        options: {
-          redirectTo: `${location.origin}/auth/oauth`
-        }
+        callbackURL: '/'
       })
-      if (error) throw error
     } catch (error: unknown) {
       setError(
         error instanceof Error ? error.message : 'An OAuth error occurred'
       )
-    } finally {
       setIsLoading(false)
     }
   }
@@ -84,9 +80,9 @@ export function LoginForm({
         <CardHeader className="text-center">
           <CardTitle className="text-2xl flex flex-col items-center justify-center gap-4">
             <IconLogo className="size-12" />
-            Welcome back
+            {t('welcomeBack')}
           </CardTitle>
-          <CardDescription>Sign in to your account</CardDescription>
+          <CardDescription>{t('signInToAccount')}</CardDescription>
         </CardHeader>
         <CardContent>
           <div className="flex flex-col gap-4">
@@ -97,7 +93,7 @@ export function LoginForm({
               onClick={handleSocialLogin}
               disabled={isLoading}
             >
-              Sign In with Google
+              {t('signInWithGoogle')}
             </Button>
 
             <div className="relative my-2">
@@ -105,13 +101,13 @@ export function LoginForm({
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-muted px-2 text-muted-foreground">Or</span>
+                <span className="bg-muted px-2 text-muted-foreground">{t('or')}</span>
               </div>
             </div>
 
             <form onSubmit={handleLogin} className="flex flex-col gap-4">
               <div className="grid gap-2">
-                <Label htmlFor="email">Email</Label>
+                <Label htmlFor="email">{t('email')}</Label>
                 <Input
                   id="email"
                   type="email"
@@ -123,12 +119,12 @@ export function LoginForm({
               </div>
               <div className="grid gap-2">
                 <div className="flex items-center">
-                  <Label htmlFor="password">Password</Label>
+                  <Label htmlFor="password">{t('password')}</Label>
                   <Link
                     href="/auth/forgot-password"
                     className="ml-auto inline-block text-sm underline-offset-4 hover:underline"
                   >
-                    Forgot password?
+                    {t('forgotPassword')}
                   </Link>
                 </div>
                 <PasswordInput
@@ -142,21 +138,21 @@ export function LoginForm({
               </div>
               {error && <p className="text-sm text-red-500">{error}</p>}
               <Button type="submit" className="w-full" disabled={isLoading}>
-                {isLoading ? 'Logging in...' : 'Sign In'}
+                {isLoading ? 'Logging in...' : t('signIn')}
               </Button>
             </form>
           </div>
           <div className="mt-6 text-center text-sm">
-            Don&apos;t have an account?{' '}
+            {t('dontHaveAccount')}{' '}
             <Link href="/auth/sign-up" className="underline underline-offset-4">
-              Sign Up
+              {t('signUp')}
             </Link>
           </div>
         </CardContent>
       </Card>
       <div className="text-center text-xs text-muted-foreground">
         <Link href="/" className="hover:underline">
-          &larr; Back to Home
+          &larr; {t('backToHome')}
         </Link>
       </div>
     </div>

@@ -7,18 +7,13 @@ vi.mock('next/headers', () => ({
     set: vi.fn(),
     delete: vi.fn(),
     getAll: vi.fn(() => [])
-  }))
+  })),
+  headers: vi.fn(() => new Map())
 }))
 
-// Mock Supabase
-vi.mock('@/lib/supabase/server', () => ({
-  createClient: vi.fn(() => ({
-    auth: {
-      getUser: vi.fn(() =>
-        Promise.resolve({ data: { user: null }, error: null })
-      )
-    }
-  }))
+// Mock Better Auth
+vi.mock('@/lib/auth/get-current-user', () => ({
+  getCurrentUser: vi.fn(() => Promise.resolve(null))
 }))
 
 // Mock the modules
