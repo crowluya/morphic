@@ -2,32 +2,32 @@
 'use client'
 
 import {
-    type Dispatch,
-    type SetStateAction,
-    useCallback,
-    useEffect,
-    useMemo,
-    useRef,
-    useState
+  type Dispatch,
+  type SetStateAction,
+  useCallback,
+  useEffect,
+  useMemo,
+  useRef,
+  useState
 } from 'react'
 
 import { SearchResultImage } from '@/lib/types'
 
 import {
-    Carousel,
-    type CarouselApi,
-    CarouselContent,
-    CarouselItem,
-    CarouselNext,
-    CarouselPrevious
+  Carousel,
+  type CarouselApi,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious
 } from '@/components/ui/carousel'
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
 } from '@/components/ui/dialog'
 
 interface SearchResultsImageSectionProps {

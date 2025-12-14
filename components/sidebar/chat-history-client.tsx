@@ -1,16 +1,16 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
 import { useCallback, useEffect, useRef, useState, useTransition } from 'react'
+import { useTranslations } from 'next-intl'
 
 import { toast } from 'sonner'
 
 import { Chat as DBChat } from '@/lib/db/schema'
 
 import {
-    SidebarGroup,
-    SidebarGroupLabel,
-    SidebarMenu
+  SidebarGroup,
+  SidebarGroupLabel,
+  SidebarMenu
 } from '@/components/ui/sidebar'
 
 import { ChatHistorySkeleton } from './chat-history-skeleton'

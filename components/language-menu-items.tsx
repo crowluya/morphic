@@ -1,7 +1,7 @@
 'use client'
 
-import { useLocale } from 'next-intl'
 import { usePathname, useRouter } from 'next/navigation'
+import { useLocale } from 'next-intl'
 
 import { Check } from 'lucide-react'
 
@@ -22,7 +22,7 @@ export function LanguageMenuItems() {
     const segments = pathname.split('/')
     // Check if the first segment is a locale
     const currentLocaleInPath = languages.some(l => l.code === segments[1])
-    
+
     let newPath: string
     if (currentLocaleInPath) {
       // Replace the locale in the path
@@ -32,16 +32,16 @@ export function LanguageMenuItems() {
       // Add locale prefix
       newPath = `/${newLocale}${pathname}`
     }
-    
+
     router.push(newPath)
     router.refresh()
   }
 
   return (
     <>
-      {languages.map((lang) => (
-        <DropdownMenuItem 
-          key={lang.code} 
+      {languages.map(lang => (
+        <DropdownMenuItem
+          key={lang.code}
           onClick={() => switchLocale(lang.code)}
           className="flex items-center justify-between"
         >

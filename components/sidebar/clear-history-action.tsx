@@ -1,8 +1,8 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
-import { useRouter } from 'next/navigation'
 import { useCallback, useState, useTransition } from 'react'
+import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { MoreHorizontal, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
@@ -10,21 +10,21 @@ import { toast } from 'sonner'
 import { clearChats } from '@/lib/actions/chat'
 
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import { SidebarGroupAction } from '@/components/ui/sidebar'
 import { Spinner } from '@/components/ui/spinner'
@@ -107,7 +107,9 @@ export function ClearHistoryAction({ empty }: ClearHistoryActionProps) {
               </AlertDialogDescription>
             </AlertDialogHeader>
             <AlertDialogFooter>
-              <AlertDialogCancel disabled={isPending}>{tc('cancel')}</AlertDialogCancel>
+              <AlertDialogCancel disabled={isPending}>
+                {tc('cancel')}
+              </AlertDialogCancel>
               <AlertDialogAction
                 disabled={isPending}
                 onClick={event => {

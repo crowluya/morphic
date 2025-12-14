@@ -1,26 +1,26 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
 import Link from 'next/link'
+import { useTranslations } from 'next-intl'
 
 import {
-    Globe,
-    Link2,
-    LogIn,
-    Palette,
-    Settings2 // Or EllipsisVertical, etc.
+  Globe,
+  Link2,
+  LogIn,
+  Palette,
+  Settings2 // Or EllipsisVertical, etc.
 } from 'lucide-react'
 
 import { Button } from '@/components/ui/button'
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuSeparator,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
-    DropdownMenuTrigger
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 
 import { ExternalLinkItems } from './external-link-items'

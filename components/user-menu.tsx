@@ -1,7 +1,7 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
 import { useRouter } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { Globe, Link2, LogOut, Palette } from 'lucide-react'
 
@@ -10,21 +10,21 @@ import { signOut } from '@/lib/auth/client'
 
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar'
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuLabel,
-    DropdownMenuSeparator,
-    DropdownMenuSub,
-    DropdownMenuSubContent,
-    DropdownMenuSubTrigger,
-    DropdownMenuTrigger
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuLabel,
+  DropdownMenuSeparator,
+  DropdownMenuSub,
+  DropdownMenuSubContent,
+  DropdownMenuSubTrigger,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 
+import { Button } from './ui/button'
 import { ExternalLinkItems } from './external-link-items'
 import { LanguageMenuItems } from './language-menu-items'
 import { ThemeMenuItems } from './theme-menu-items'
-import { Button } from './ui/button'
 
 interface UserMenuProps {
   user: User

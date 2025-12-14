@@ -1,16 +1,16 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
 import React from 'react'
+import { useTranslations } from 'next-intl'
 
 import { ArrowRight } from 'lucide-react'
 
 import type { RelatedQuestionsData } from '@/lib/types/ai'
 
-import { CollapsibleMessage } from './collapsible-message'
-import { Section } from './section'
 import { Button } from './ui/button'
 import { Skeleton } from './ui/skeleton'
+import { CollapsibleMessage } from './collapsible-message'
+import { Section } from './section'
 
 interface RelatedQuestionsProps {
   data: RelatedQuestionsData
@@ -22,7 +22,7 @@ export const RelatedQuestions: React.FC<RelatedQuestionsProps> = ({
   onQuerySelect
 }) => {
   const t = useTranslations('search')
-  
+
   const renderQuestionButtons = (questions: Array<{ question: string }>) =>
     questions.map((item, index) => (
       <div className="flex items-start w-full" key={index}>

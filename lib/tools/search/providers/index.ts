@@ -49,4 +49,3 @@ export { SearXNGSearchProvider } from './searxng'
 export { SerperSearchProvider } from './serper'
 export { TavilySearchProvider } from './tavily'
 export type { SearchProvider }
-
