@@ -1,7 +1,7 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
 import { useState, useTransition } from 'react'
+import { useTranslations } from 'next-intl'
 
 import { Share } from 'lucide-react'
 import { toast } from 'sonner'
@@ -12,13 +12,13 @@ import { cn } from '@/lib/utils'
 
 import { Button } from './ui/button'
 import {
-    Dialog,
-    DialogContent,
-    DialogDescription,
-    DialogFooter,
-    DialogHeader,
-    DialogTitle,
-    DialogTrigger
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger
 } from './ui/dialog'
 import { Spinner } from './ui/spinner'
 
@@ -83,9 +83,7 @@ export function ChatShare({ chatId, className }: ChatShareProps) {
         <DialogContent>
           <DialogHeader>
             <DialogTitle>{t('shareChat')}</DialogTitle>
-            <DialogDescription>
-              {t('shareDescription')}
-            </DialogDescription>
+            <DialogDescription>{t('shareDescription')}</DialogDescription>
           </DialogHeader>
           <DialogFooter className="items-center">
             {!shareUrl && (

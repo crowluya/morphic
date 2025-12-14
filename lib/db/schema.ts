@@ -1,16 +1,16 @@
 import { createId } from '@paralleldrive/cuid2'
 import { InferSelectModel, sql } from 'drizzle-orm'
 import {
-    check,
-    index,
-    integer,
-    json,
-    jsonb,
-    pgPolicy,
-    pgTable,
-    text,
-    timestamp,
-    varchar
+  check,
+  index,
+  integer,
+  json,
+  jsonb,
+  pgPolicy,
+  pgTable,
+  text,
+  timestamp,
+  varchar
 } from 'drizzle-orm/pg-core'
 
 // Constants

@@ -2,6 +2,7 @@ import { tool, UIToolInvocation } from 'ai'
 
 import { fetchSchema } from '@/lib/schema/fetch'
 import { SearchResults as SearchResultsType } from '@/lib/types'
+
 import { serperScrape } from './search/providers/serper'
 
 const CONTENT_CHARACTER_LIMIT = 50000

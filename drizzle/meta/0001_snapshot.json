@@ -123,9 +123,7 @@
           "name": "users_manage_own_chats",
           "as": "PERMISSIVE",
           "for": "ALL",
-          "to": [
-            "public"
-          ],
+          "to": ["public"],
           "using": "user_id = current_setting('app.current_user_id', true)",
           "withCheck": "user_id = current_setting('app.current_user_id', true)"
         },
@@ -133,9 +131,7 @@
           "name": "public_chats_readable",
           "as": "PERMISSIVE",
           "for": "SELECT",
-          "to": [
-            "public"
-          ],
+          "to": ["public"],
           "using": "visibility = 'public'"
         }
       },
@@ -230,18 +226,14 @@
           "name": "feedback_select_policy",
           "as": "PERMISSIVE",
           "for": "SELECT",
-          "to": [
-            "public"
-          ],
+          "to": ["public"],
           "using": "true"
         },
         "anyone_can_insert_feedback": {
           "name": "anyone_can_insert_feedback",
           "as": "PERMISSIVE",
           "for": "INSERT",
-          "to": [
-            "public"
-          ],
+          "to": ["public"],
           "withCheck": "true"
         }
       },
@@ -333,12 +325,8 @@
           "name": "morphic_messages_chat_id_morphic_chats_id_fk",
           "tableFrom": "morphic_messages",
           "tableTo": "morphic_chats",
-          "columnsFrom": [
-            "chat_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["chat_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -350,9 +338,7 @@
           "name": "users_manage_chat_messages",
           "as": "PERMISSIVE",
           "for": "ALL",
-          "to": [
-            "public"
-          ],
+          "to": ["public"],
           "using": "EXISTS (\n        SELECT 1 FROM \"morphic_chats\"\n        WHERE \"morphic_chats\".id = chat_id\n        AND \"morphic_chats\".user_id = current_setting('app.current_user_id', true)\n      )",
           "withCheck": "EXISTS (\n        SELECT 1 FROM \"morphic_chats\"\n        WHERE \"morphic_chats\".id = chat_id\n        AND \"morphic_chats\".user_id = current_setting('app.current_user_id', true)\n      )"
         },
@@ -360,9 +346,7 @@
           "name": "public_chat_messages_readable",
           "as": "PERMISSIVE",
           "for": "SELECT",
-          "to": [
-            "public"
-          ],
+          "to": ["public"],
           "using": "EXISTS (\n        SELECT 1 FROM \"morphic_chats\"\n        WHERE \"morphic_chats\".id = chat_id\n        AND \"morphic_chats\".visibility = 'public'\n      )"
         }
       },
@@ -658,12 +642,8 @@
           "name": "morphic_parts_message_id_morphic_messages_id_fk",
           "tableFrom": "morphic_parts",
           "tableTo": "morphic_messages",
-          "columnsFrom": [
-            "message_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["message_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -675,9 +655,7 @@
           "name": "users_manage_message_parts",
           "as": "PERMISSIVE",
           "for": "ALL",
-          "to": [
-            "public"
-          ],
+          "to": ["public"],
           "using": "EXISTS (\n        SELECT 1 FROM \"morphic_messages\"\n        INNER JOIN \"morphic_chats\" ON \"morphic_chats\".id = \"morphic_messages\".chat_id\n        WHERE \"morphic_messages\".id = message_id\n        AND \"morphic_chats\".user_id = current_setting('app.current_user_id', true)\n      )",
           "withCheck": "EXISTS (\n        SELECT 1 FROM \"morphic_messages\"\n        INNER JOIN \"morphic_chats\" ON \"morphic_chats\".id = \"morphic_messages\".chat_id\n        WHERE \"morphic_messages\".id = message_id\n        AND \"morphic_chats\".user_id = current_setting('app.current_user_id', true)\n      )"
         },
@@ -685,9 +663,7 @@
           "name": "public_chat_parts_readable",
           "as": "PERMISSIVE",
           "for": "SELECT",
-          "to": [
-            "public"
-          ],
+          "to": ["public"],
           "using": "EXISTS (\n        SELECT 1 FROM \"morphic_messages\"\n        INNER JOIN \"morphic_chats\" ON \"morphic_chats\".id = \"morphic_messages\".chat_id\n        WHERE \"morphic_messages\".id = message_id\n        AND \"morphic_chats\".visibility = 'public'\n      )"
         }
       },
@@ -806,12 +782,8 @@
           "name": "morphic_accounts_user_id_morphic_users_id_fk",
           "tableFrom": "morphic_accounts",
           "tableTo": "morphic_users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -883,12 +855,8 @@
           "name": "morphic_sessions_user_id_morphic_users_id_fk",
           "tableFrom": "morphic_sessions",
           "tableTo": "morphic_users",
-          "columnsFrom": [
-            "user_id"
-          ],
-          "columnsTo": [
-            "id"
-          ],
+          "columnsFrom": ["user_id"],
+          "columnsTo": ["id"],
           "onDelete": "cascade",
           "onUpdate": "no action"
         }
@@ -898,9 +866,7 @@
         "morphic_sessions_token_unique": {
           "name": "morphic_sessions_token_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "token"
-          ]
+          "columns": ["token"]
         }
       },
       "policies": {},
@@ -964,9 +930,7 @@
         "morphic_users_email_unique": {
           "name": "morphic_users_email_unique",
           "nullsNotDistinct": false,
-          "columns": [
-            "email"
-          ]
+          "columns": ["email"]
         }
       },
       "policies": {},

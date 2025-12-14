@@ -7,8 +7,8 @@ import { SearchResults } from '@/components/search-results'
 import { SearchResultsImageSection } from '@/components/search-results-image'
 import { Section, ToolArgsSection } from '@/components/section'
 import {
-    createVideoSearchResults,
-    VideoSearchResults
+  createVideoSearchResults,
+  VideoSearchResults
 } from '@/components/video-search-results'
 
 export function SearchArtifactContent({ tool }: { tool: ToolPart<'search'> }) {

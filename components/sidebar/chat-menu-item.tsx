@@ -1,9 +1,9 @@
 'use client'
 
-import { useLocale, useTranslations } from 'next-intl'
+import { useCallback, useState, useTransition } from 'react'
 import Link from 'next/link'
 import { usePathname, useRouter } from 'next/navigation'
-import { useCallback, useState, useTransition } from 'react'
+import { useLocale, useTranslations } from 'next-intl'
 
 import { MoreHorizontal, Trash2 } from 'lucide-react'
 import { toast } from 'sonner'
@@ -12,26 +12,26 @@ import { deleteChat } from '@/lib/actions/chat'
 import { Chat as DBChat } from '@/lib/db/schema'
 
 import {
-    AlertDialog,
-    AlertDialogAction,
-    AlertDialogCancel,
-    AlertDialogContent,
-    AlertDialogDescription,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogTitle,
-    AlertDialogTrigger
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger
 } from '@/components/ui/alert-dialog'
 import {
-    DropdownMenu,
-    DropdownMenuContent,
-    DropdownMenuItem,
-    DropdownMenuTrigger
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger
 } from '@/components/ui/dropdown-menu'
 import {
-    SidebarMenuAction,
-    SidebarMenuButton,
-    SidebarMenuItem
+  SidebarMenuAction,
+  SidebarMenuButton,
+  SidebarMenuItem
 } from '@/components/ui/sidebar'
 
 import { Spinner } from '../ui/spinner'

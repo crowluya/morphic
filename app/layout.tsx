@@ -1,7 +1,7 @@
 import type { Metadata, Viewport } from 'next'
+import { Inter as FontSans } from 'next/font/google'
 import { NextIntlClientProvider } from 'next-intl'
 import { getLocale, getMessages } from 'next-intl/server'
-import { Inter as FontSans } from 'next/font/google'
 
 import { Analytics } from '@vercel/analytics/next'
 
@@ -26,6 +26,11 @@ const fontSans = FontSans({
 const title = 'Morphic'
 const description =
   'A fully open-source AI-powered answer engine with a generative UI.'
+
+// This app depends on request-time data (auth, cookies, locale). Force dynamic
+// rendering to avoid build-time prerendering failures in environments that don't
+// provide all required runtime secrets.
+export const dynamic = 'force-dynamic'
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://morphic.sh'),

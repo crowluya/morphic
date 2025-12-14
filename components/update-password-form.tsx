@@ -1,19 +1,19 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
-import { useRouter, useSearchParams } from 'next/navigation'
 import { useState } from 'react'
+import { useRouter, useSearchParams } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import { authClient } from '@/lib/auth/client'
 import { cn } from '@/lib/utils/index'
 
 import { Button } from '@/components/ui/button'
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
 } from '@/components/ui/card'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
@@ -60,9 +60,7 @@ export function UpdatePasswordForm({
       <Card>
         <CardHeader>
           <CardTitle className="text-2xl">{t('resetPassword')}</CardTitle>
-          <CardDescription>
-            {t('resetPasswordDesc')}
-          </CardDescription>
+          <CardDescription>{t('resetPasswordDesc')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleUpdatePassword}>

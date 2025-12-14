@@ -1,20 +1,20 @@
-import { getTranslations } from 'next-intl/server'
-import Link from 'next/link'
 import { Suspense } from 'react'
+import Link from 'next/link'
+import { getTranslations } from 'next-intl/server'
 
-import { Plus } from 'lucide-react'
+import { Pencil, Plus } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
 import {
-    Sidebar,
-    SidebarContent,
-    SidebarHeader,
-    SidebarMenu,
-    SidebarMenuButton,
-    SidebarMenuItem,
-    SidebarRail,
-    SidebarTrigger
+  Sidebar,
+  SidebarContent,
+  SidebarHeader,
+  SidebarMenu,
+  SidebarMenuButton,
+  SidebarMenuItem,
+  SidebarRail,
+  SidebarTrigger
 } from '@/components/ui/sidebar'
 
 import { ChatHistorySection } from './sidebar/chat-history-section'
@@ -23,7 +23,7 @@ import { IconLogo } from './ui/icons'
 
 export default async function AppSidebar() {
   const t = await getTranslations('sidebar')
-  
+
   return (
     <Sidebar side="left" variant="sidebar" collapsible="offcanvas">
       <SidebarHeader className="flex flex-row justify-between items-center">
@@ -40,6 +40,14 @@ export default async function AppSidebar() {
               <Link href="/" className="flex items-center gap-2">
                 <Plus className="size-4" />
                 <span>{t('newChat')}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href="/ai-editor" className="flex items-center gap-2">
+                <Pencil className="size-4" />
+                <span>AI Editor</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>

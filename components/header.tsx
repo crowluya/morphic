@@ -1,19 +1,19 @@
 'use client'
 
 // import Link from 'next/link' // No longer needed directly here for Sign In button
-import { useTranslations } from 'next-intl'
-import { usePathname } from 'next/navigation'
 import React, { useState } from 'react'
+import { usePathname } from 'next/navigation'
+import { useTranslations } from 'next-intl'
 
 import type { User } from '@/lib/auth'
 import { cn } from '@/lib/utils'
 
 import { useSidebar } from '@/components/ui/sidebar'
 
-import { FeedbackModal } from './feedback-modal'
 import { Button } from './ui/button'
+import { FeedbackModal } from './feedback-modal'
 // import { Button } from './ui/button' // No longer needed directly here for Sign In button
-import GuestMenu from './guest-menu'; // Import the new GuestMenu component
+import GuestMenu from './guest-menu' // Import the new GuestMenu component
 import UserMenu from './user-menu'
 
 interface HeaderProps {

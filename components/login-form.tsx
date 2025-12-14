@@ -1,20 +1,20 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
+import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 import { signIn } from '@/lib/auth/client'
 import { cn } from '@/lib/utils/index'
 
 import { Button } from '@/components/ui/button'
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
 } from '@/components/ui/card'
 import { IconLogo } from '@/components/ui/icons'
 import { Input } from '@/components/ui/input'
@@ -101,7 +101,9 @@ export function LoginForm({
                 <span className="w-full border-t" />
               </div>
               <div className="relative flex justify-center text-xs uppercase">
-                <span className="bg-muted px-2 text-muted-foreground">{t('or')}</span>
+                <span className="bg-muted px-2 text-muted-foreground">
+                  {t('or')}
+                </span>
               </div>
             </div>
 

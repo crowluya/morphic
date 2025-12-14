@@ -1,15 +1,15 @@
 'use client'
 
-import { useTranslations } from 'next-intl'
 import { useEffect, useRef, useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 import {
-    FileText,
-    HelpCircle,
-    LucideIcon,
-    Newspaper,
-    Scale,
-    Search
+  FileText,
+  HelpCircle,
+  LucideIcon,
+  Newspaper,
+  Scale,
+  Search
 } from 'lucide-react'
 
 import { cn } from '@/lib/utils'

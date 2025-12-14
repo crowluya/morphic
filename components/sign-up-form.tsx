@@ -1,19 +1,19 @@
 'use client'
-import { useTranslations } from 'next-intl'
+import { useState } from 'react'
 import Link from 'next/link'
 import { useRouter } from 'next/navigation'
-import { useState } from 'react'
+import { useTranslations } from 'next-intl'
 
 import { signUp } from '@/lib/auth/client'
 import { cn } from '@/lib/utils/index'
 
 import { Button } from '@/components/ui/button'
 import {
-    Card,
-    CardContent,
-    CardDescription,
-    CardHeader,
-    CardTitle
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle
 } from '@/components/ui/card'
 import { IconLogo } from '@/components/ui/icons'
 import { Input } from '@/components/ui/input'
@@ -72,9 +72,7 @@ export function SignUpForm({
             <IconLogo className="size-12" />
             {t('createAccount')}
           </CardTitle>
-          <CardDescription>
-            {t('enterDetailsToStart')}
-          </CardDescription>
+          <CardDescription>{t('enterDetailsToStart')}</CardDescription>
         </CardHeader>
         <CardContent>
           <form onSubmit={handleSignUp}>

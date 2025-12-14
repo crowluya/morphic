@@ -8,16 +8,17 @@ import * as schema from './schema'
 const isDevelopment = process.env.NODE_ENV === 'development'
 const isTest = process.env.NODE_ENV === 'test'
 
-if (!process.env.DATABASE_URL && !isTest) {
-  throw new Error('DATABASE_URL environment variable is not set')
-}
-
 const connectionString =
   process.env.DATABASE_URL ??
-  (isTest ? 'postgres://user:pass@localhost:5432/testdb' : undefined)
+  (isTest
+    ? 'postgres://user:pass@localhost:5432/testdb'
+    : 'postgres://user:pass@localhost:5432/postgres')
 
-if (!connectionString) {
-  throw new Error('DATABASE_URL environment variable is not set')
+if (!process.env.DATABASE_URL && !isTest) {
+  // Avoid crashing during build/CI environments that don't provide runtime
+  // secrets. Any real DB access will still fail unless a valid DATABASE_URL is
+  // provided at runtime.
+  console.warn('[DB] DATABASE_URL is not set. Using a placeholder connection.')
 }
 
 // Log which connection is being used (for debugging)
