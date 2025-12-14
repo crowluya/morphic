@@ -2,7 +2,7 @@ import { getTranslations } from 'next-intl/server'
 import Link from 'next/link'
 import { Suspense } from 'react'
 
-import { Plus } from 'lucide-react'
+import { Plus, FileEdit } from 'lucide-react'
 
 import { cn } from '@/lib/utils'
 
@@ -40,6 +40,14 @@ export default async function AppSidebar() {
               <Link href="/" className="flex items-center gap-2">
                 <Plus className="size-4" />
                 <span>{t('newChat')}</span>
+              </Link>
+            </SidebarMenuButton>
+          </SidebarMenuItem>
+          <SidebarMenuItem>
+            <SidebarMenuButton asChild>
+              <Link href="/editor" className="flex items-center gap-2">
+                <FileEdit className="size-4" />
+                <span>{t('aiEditor')}</span>
               </Link>
             </SidebarMenuButton>
           </SidebarMenuItem>
