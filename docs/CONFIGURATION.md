@@ -125,6 +125,30 @@ For detailed configuration options, refer to the [SearXNG documentation](https:/
 docker-compose logs searxng
 ```
 
+### Serper Search (Optional)
+
+[Serper.dev](https://serper.dev/) provides fast Google search results with 1-2 second response times. It's an affordable alternative to other search APIs.
+
+#### Basic Setup
+
+1. Get your API key from [Serper.dev](https://serper.dev/)
+2. Set up Serper as your search provider:
+
+```bash
+SEARCH_API=serper
+SERPER_API_KEY=[YOUR_SERPER_API_KEY]
+```
+
+**Features:**
+
+- Fast response times (1-2 seconds)
+- Real-time Google search results
+- Support for web search, images, and more
+- Affordable pricing with pay-as-you-go model
+- Up to 100 results per query
+
+**Note:** The same `SERPER_API_KEY` is also used for video search functionality. You can get 2,500 free queries when you sign up.
+
 ### Brave Search (Optional)
 
 Brave Search provides enhanced support for video and image searches when used as a general search provider:
