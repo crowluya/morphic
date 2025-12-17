@@ -14,8 +14,7 @@ export type SearchProviderType =
   | 'brave'
   | 'serper'
 
-// Default to Serper as primary search provider
-export const DEFAULT_PROVIDER: SearchProviderType = 'serper'
+export const DEFAULT_PROVIDER: SearchProviderType = 'tavily'
 
 export function createSearchProvider(
   type?: SearchProviderType
@@ -37,8 +36,8 @@ export function createSearchProvider(
     case 'firecrawl':
       return new FirecrawlSearchProvider()
     default:
-      // Default to SerperSearchProvider
-      return new SerperSearchProvider()
+      // Default to TavilySearchProvider if an unknown provider is specified
+      return new TavilySearchProvider()
   }
 }
 
